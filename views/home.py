@@ -19,4 +19,4 @@ def index(request: Request):
 @template(template_file='home/about.pt')
 def about(request: Request):
     vm = ViewModelBase(request)
-    return {}
+    return vm
