@@ -1,5 +1,6 @@
 from starlette.requests import Request
 
+from services import user_service
 from viewmodels.shared.viewmodel import ViewModelBase
 from data.user import User
 
@@ -7,4 +8,4 @@ from data.user import User
 class AccountViewModel(ViewModelBase):
     def __init__(self, request: Request):
         super().__init__(request)
-        self.user = User('Mickael', 'michael@talkpython.fm', 'aldjladj;flakadfa')
+        self.user = user_service.get_user_by_id(self.user_id)

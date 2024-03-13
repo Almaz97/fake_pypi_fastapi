@@ -35,7 +35,6 @@ async def register(request: Request):
     if vm.error:
         return vm.to_dict()
 
-    # Todo: Redirect here
     account = user_service.create_account(vm.name, vm.email, vm.password)
 
     # login user
