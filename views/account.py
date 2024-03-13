@@ -1,3 +1,5 @@
+import asyncio
+
 import fastapi
 from fastapi_chameleon import template
 from starlette import status
@@ -14,8 +16,9 @@ router = fastapi.APIRouter()
 
 @router.get('/account')
 @template()
-def index(request: Request):
+async def index(request: Request):
     vm = AccountViewModel(request)
+    await vm.load()
     return vm.to_dict()
 
 
@@ -35,7 +38,7 @@ async def register(request: Request):
     if vm.error:
         return vm.to_dict()
 
-    account = user_service.create_account(vm.name, vm.email, vm.password)
+    account = await user_service.create_account(vm.name, vm.email, vm.password)
 
     # login user
     response = fastapi.responses.RedirectResponse(
@@ -61,8 +64,9 @@ async def login(request: Request):
     if vm.error:
         return vm.to_dict()
 
-    user = user_service.login_user(vm.email, vm.password)
+    user = await user_service.login_user(vm.email, vm.password)
     if not user:
+        await asyncio.sleep(5)
         vm.error = 'The account does not exist or the password is wrong.'
         return vm.to_dict()
 
